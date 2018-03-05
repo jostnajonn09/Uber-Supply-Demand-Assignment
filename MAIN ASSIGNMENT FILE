@@ -16,9 +16,6 @@ str(Uber.Request)
 #or you can also have a glimpse of data frame using Uber.Requests
 glimpse(Uber.Request)
 
-
-
-
 ####Handling data quality issues/Data Cleaning####
 
 #checking for any duplicate rows
@@ -125,14 +122,6 @@ ggplot(Uber.Request,aes(Uber.Request$Status))+geom_bar(fill="skyblue4")+annotate
 #Analysing variable Request.hour by plotting a bar chart on it (and looking for some insights)
 ggplot(Uber.Request,aes(Uber.Request$Request.hour))+geom_bar(fill="royalblue1")+labels(x="Request.Hour",y="count",main="uber requests raised per hour")
 
-
-
-
-
-
-
-
-
 #Analysing variable Drop.hour by plotting a bar chart on it (and looking for some insights)
 ggplot(Uber.Request,aes(Uber.Request$Drop.hour))+geom_bar(fill="royalblue1")
 
@@ -150,5 +139,7 @@ ggplot(Uber.Request,aes(x=Request.hour))+geom_bar(fill="skyblue4")+theme_bw()+fa
 
 # the above plot clearly shows that most of the request gets cancelled for city pickups
 #and cars are not available for airport pickups
+ 
+ 
  
 
