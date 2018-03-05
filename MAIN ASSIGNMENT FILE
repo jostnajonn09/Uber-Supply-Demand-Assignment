@@ -142,4 +142,7 @@ ggplot(Uber.Request,aes(x=Request.hour))+geom_bar(fill="skyblue4")+theme_bw()+fa
  
  
  
+ 
+ 
+ 
 
