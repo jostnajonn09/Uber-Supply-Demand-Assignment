@@ -16,6 +16,9 @@ str(Uber.Request)
 #or you can also have a glimpse of data frame using Uber.Requests
 glimpse(Uber.Request)
 
+
+
+
 ####Handling data quality issues/Data Cleaning####
 
 #checking for any duplicate rows
@@ -113,36 +116,60 @@ Uber.Request$Drop_Date<-NULL
 # Since Request.id and Driver.id are id or unique values there isn't much sense analysing them
 
 #Analysing variable Pickup.point by plotting a bar chart on it (and looking for some insights)
-ggplot(Uber.Request,aes(Uber.Request$Pickup.point))+geom_bar(fill="skyblue4")+annotate("text",x="Airport",y=3450,label="48%")+annotate("text",x="City",y=3700,label="51%")
+ggplot(Uber.Request,aes(Pickup.point))+geom_bar(fill="royalblue1")+annotate("text",x=c("Airport","City"),y=c(3450,3700),label=c("48%","51%"))
 #The above plot shows that ,there isn't much difference between Airport and city pickup requests
 
 #Analysing variable Status by plotting a bar chart on it (and looking for some insights)
-ggplot(Uber.Request,aes(Uber.Request$Status))+geom_bar(fill="skyblue4")+annotate("text",x="No Cars Available",y=2800,label="39%")+annotate("text",x="Cancelled",y=1400,label="19%")+annotate("text",x="Trip Completed",y=2950,label="41%")
+ggplot(Uber.Request,aes(Status))+geom_bar(fill="royalblue1")+annotate("text",x=c("Cancelled","No Cars Available","Trip Completed"),y=c(1400,2800,2950),label=c("19%","39%","41%"))
+#The above plot clearly depicts that only 41% of the requests from city and airport gets completed and the remaining 59% trips either get cancelled or there is  no car availability 
 
 #Analysing variable Request.hour by plotting a bar chart on it (and looking for some insights)
-ggplot(Uber.Request,aes(Uber.Request$Request.hour))+geom_bar(fill="royalblue1")+labels(x="Request.Hour",y="count",main="uber requests raised per hour")
+ggplot(Uber.Request,aes(Request.hour))+geom_bar(fill="royalblue1")+annotate("text",x=c(7.2,19),y=c(500,550),label=("High Request Rate"))
+#The above plot clearly depicts that there are high request rates from 5AM TO 10 AM and 5pm to 10 pm
 
 #Analysing variable Drop.hour by plotting a bar chart on it (and looking for some insights)
 ggplot(Uber.Request,aes(Uber.Request$Drop.hour))+geom_bar(fill="royalblue1")
+#The plot for Drop.hour mostly shows the same pattern as Request.hour.
+#But here only those requests which are completed are included 
+#remaining all are NA'S
+
+#More information can be obtained by plotting request.hour,status and pickup points on different levels
+
+
+#Plotting barchart on varriable pickup point for different levels of Trip Status 
+ggplot(Uber.Request,aes(Pickup.point,fill=Status))+geom_bar(position = "dodge")+theme_bw()
+#The above plot  shows that about 30% of city requests gets   
+#cancelled and for about 52% requests the cars are not available 
+#and only 42% of all trip requests get completed
+
+#THE ABOVE PROPORTIONS CAN BE KNOWN FROM THE FOLLOWING CODE
+#############################################################################################################################################
+prop.table(table(Uber.Request$Pickup.point[Uber.Request$Pickup.point=="City"],Uber.Request$Status[Uber.Request$Pickup.point=="City"]))
+prop.table(table(Uber.Request$Pickup.point[Uber.Request$Pickup.point=="Airport"],Uber.Request$Status[Uber.Request$Pickup.point=="Airport"]))
+prop.table(table(Uber.Request$Pickup.point,Uber.Request$Status))
+##############################################################################################################################################
+
 
 #ploting uber requests at different hours of day for both airport and city pickups
-ggplot(Uber.Request,aes(x=Request.hour))+geom_bar(fill="skyblue4")+theme_bw()+facet_wrap(~Pickup.point)
+ggplot(Uber.Request,aes(x=Request.hour,fill=Pickup.point))+geom_bar()+theme_bw()+facet_wrap(~Pickup.point)
+#The above plot clearly shows that most of city pickup request are from 5am to 10 am 
+#and most of the airport pickup requests are from  5pm to 10 pm
 
-#The above plot clearly shows that most of city pickup request are from 4am to 10 am and 
-#most of the airport pickup requests are from  5pm to 10 pm
+#ploting uber requests at different hours of day for different levels of Trip status
+ggplot(Uber.Request,aes(x=Request.hour,fill=Status))+geom_bar()+facet_wrap(~Status)
+#The above plot depicts that most requests that get cancelled fall under 
+#5AM TO 10AM  and that's also the peak city pickup request time slot.
+#And most requests that have no availability of cars fall under the time slot
+#5PM TO 10PM (17 to 22) and that's the peak airport pickup request time slot
 
+#Drilling the  plot on both  Status and Pickup variables gives a lot more information
+ggplot(Uber.Request,aes(x=Request.hour,fill=Status))+geom_bar()+theme_bw()+facet_wrap(Pickup.point~Status)
+# the above plot clearly shows that most of the request gets cancelled 
+#for city pickups from 5AM to 10AM and the cars are not available for
+#airport pickups from (5PM to 10PM)
+ 
 
-#Drilling the same plot on another variable Status gives a lot of valuable information
+#From all the analysis it can be said that during early morning hours(5AM to 10AM) 
+#there are high city pickup requests Of which 30% get cancelled 
 
-ggplot(Uber.Request,aes(x=Request.hour))+geom_bar(fill="skyblue4")+theme_bw()+facet_wrap(Pickup.point~Status)
-
-
-# the above plot clearly shows that most of the request gets cancelled for city pickups
-#and cars are not available for airport pickups
- 
- 
- 
- 
- 
- 
 
